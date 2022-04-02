@@ -1,0 +1,41 @@
+swagger: "2.0"
+info:
+  description: Demo swagger file along with the app.py code
+  version: "1.0.0"
+  title: Connexion demo
+consumes:
+  - application/json
+produces:
+  - application/json
+
+basePath: /api
+
+# Paths supported by the server application
+paths:
+  /calculate_bmi:
+    get:
+      operationId: bmi.calculate_bmi
+      tags:
+        - Demo to calculate bmi
+      summary: 'BMI'
+      description: Calculate BMI given height(in m) and weight(in kg)
+      parameters:
+        - name: height
+          in: query
+          description: Height (in m)
+          type: number
+          default: 1.5
+          required: True
+        - name: weight
+          in: query
+          description: Weight (in kg)
+          type: number
+          default: 65
+          required: True
+      responses:
+        200:
+          description: 'resulting BMI'
+          schema:
+            properties:
+              output:
+                type: number
