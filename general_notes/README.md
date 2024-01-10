@@ -68,3 +68,48 @@ finally:
 
 In our case, we did not choose to go ahead with this approach as the first approach seemed very much sufficient. All this is clearly documented in the below link: <br>
 [snowflake documentation](https://docs.snowflake.com/en/developer-guide/python-connector/python-connector-install)
+
+
+# Modules and script execution
+To execute a python file, the straightforward command is :
+```
+python path/to/file.py
+```
+
+This seems simple, but can easily get confusing when there is a project and code is organized into folders. Let us consider a project structure like this: 
+
+```
+proj_root
+├── myfolder1
+│   ├── __init__.py
+│   └── module1.py
+├── src
+│   ├── __init__.py
+│   └── run.py
+└── __init__.py
+```
+
+Assume that `run.py` is the main script and it contains a import from `myfolder1` something like this:
+```
+from myfolder1.module1 import module1
+```
+
+If we run the `run.py` from the `proj_root`, the details will be:
+```
+# command to execute:
+python src\run.py
+
+# sys.path will contain: 
+proj_root\src
+
+```
+this command will fail because the `proj_root` would not be in the sys.path and there will be an 'Module Not Found' error. This has been explained in the SO issue [here](https://stackoverflow.com/questions/49095869/how-can-i-run-a-python-3-script-with-imports-from-a-subfolder)
+
+The solution which works better instead of the `sys.path.append` is the following:
+
+```
+# Run the script as: 
+python -m src.py 
+
+# Note the use of the '-m' switch and dots to refer to subfolders
+```
