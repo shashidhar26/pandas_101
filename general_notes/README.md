@@ -109,7 +109,40 @@ The solution which works better instead of the `sys.path.append` is the followin
 
 ```
 # Run the script as: 
-python -m src.py 
+python -m src.run 
 
 # Note the use of the '-m' switch and dots to refer to subfolders
+```
+
+# Jupyter notebooks with conda
+
+To run jupyter notebooks with conda, you need to install the jupyter notebook extension (or `jupyterlab` extension). It is recommended to install these extensions in the `base` environment in conda. 
+
+Once this is done, you can add as many conda environments to this. 
+
+```
+# first create the conda envs: 
+(base)$ conda create env --name myenv
+
+# then activate the new env:
+(base)$ conda activate myenv
+```
+
+To display the new env `myenv` in the jupyterlab notebooks, you need to install ipykernel in the env and add this kernel to the list of jupyter's known kernels. Like this: 
+
+
+```
+(myenv)$ pip install ipykernel
+(myenv)$ python -m ipykernel install --user --name myenv --display-name "Python (myenv)"
+```
+Once this is done, you will be able to see the new env in the jupyterlab notebooks. You can check this on command line by swtiching back to the base env. 
+
+```
+(myenv)$ conda deactivate
+(base)$ jupyter kernelspec list 
+# Should display the following: 
+Available kernels:
+  myenv    C:\Users\un\AppData\Roaming\jupyter\kernels\myenv
+  python3     C:\Users\un\AppData\Roaming\jupyter\kernels\python3
+
 ```
