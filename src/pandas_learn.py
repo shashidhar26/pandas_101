@@ -28,6 +28,10 @@ df_parquet = pq.read_table('path/to/pq/my_parquet')
 df = df_parquet.to_pandas()
 # optional - delete pq in RAM to save space:
 del df_parquet
+# Update: In newer version of pandas, there is a function which will automatically read parquet files
+# df.read_parquet() - works similar to read_csv
+
+
 
 '''
 Exploratory Data Analysis: 
@@ -64,7 +68,10 @@ df = df.assign(newCol1 =None, newCol2='', newCol3=np.NaN)
 # WARNING: Use the inplace option very CAREFULLY - it will still create a copy - but reassign the copy to original! 
 df.drop(columns=['newCol1','newCol2','newCol3'],inplace=True)
 # A better way to do it would be like this:
-# df2 = df.drop(columns=['col_to_drop'],inplace=True)
+cols_to_drop = ['newCol1','newCol2','newCol3']
+df2 = df.drop(columns=[cols_to_drop],inplace=True)
+# If you dont know the column names, but want to filter columns which match a regular expression:
+cols_to_drop = df.filter(like='newC').columns.to_list()
 
 
 # If there are duplicate rows, you could drop them.
@@ -96,13 +103,15 @@ unionDf = unionDf.append(secondDf,ignore_index=True)
 
 # Once a df is read into memory, if you want to change the data types of the columns, 
 # for individual column names, you use : 
-df["col1"]= df["col1"].to_numeric()
+df["strcol"]= df["strcol"].to_numeric()
+# for strings, the better way to do this would be to use astype
+df["intcol"]= df["intcol"].astype(str)
 
 # However, if you have a huge list and prefer to do it via dictionary, first create one:
 dtype_dict = {'col1': 'float32', 
  'col2': 'category',
  'col3': 'object'}
- df = df.astype(dtype_dict)
+df = df.astype(dtype_dict)
 
  ### Lookup from another table is done using:
 # 1. Map if the lookup is just based on one single column
@@ -154,7 +163,6 @@ df = df.sort_values(by=['col1','col2'], ascending = [True,False], ignore_index=T
 # if ignore_index=True, then the resulting df will have a new_index
 
 # https://stackoverflow.com/questions/47152691/how-to-pivot-a-dataframe
-
 
 
 # Quick univariate plots: 
